@@ -1,0 +1,32 @@
+{
+  "name": "tappr-api",
+  "version": "1.0.0",
+  "description": "API for Tappr AngularJS demo app",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/nodemon/bin/nodemon.js server",
+    "test": "./node_modules/lab/bin/lab -c -L",
+    "test-cover": "./node_modules/lab/bin/lab -c -r html -o ./test/artifacts/coverage.html && open ./test/artifacts/coverage.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Sharondio/tappr-api.git"
+  },
+  "author": "Dan Skaggs <dan.skaggs@web-meister.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sharondio/tappr-api/issues"
+  },
+  "homepage": "https://github.com/Sharondio/tappr-api",
+  "dependencies": {
+    "confidence": "^1.x.x",
+    "glue": "^2.x.x",
+    "hapi": "^8.x.x",
+    "hoek": "^2.x.x"
+  },
+  "devDependencies": {
+    "code": "^1.x.x",
+    "lab": "^5.x.x",
+    "nodemon": "^1.x.x"
+  }
+}
