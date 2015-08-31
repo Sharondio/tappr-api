@@ -1,4 +1,4 @@
-var Hoek = require('hoek');
+
 
 
 exports.register = function (server, options, next) {
@@ -21,6 +21,19 @@ exports.register = function (server, options, next) {
             	{ firstName: 'Dan', lastName: 'Skaggs' },
             	{ firstName: 'Sharon', lastName: 'DiOrio' }
             ]);
+        }
+    });
+
+
+	server.route({
+        method: 'GET',
+        path: '/beer/{beerId}',
+        handler: function (request, reply) {
+
+			db.collection("beers").findOne({"id": request.params.beerId}, function(err, beer) {
+				reply( beer );
+			});
+
         }
     });
 
