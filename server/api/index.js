@@ -1,6 +1,3 @@
-
-
-
 exports.register = function (server, options, next) {
 
     server.route({
@@ -8,7 +5,7 @@ exports.register = function (server, options, next) {
         path: '/',
         handler: function (request, reply) {
 
-            reply({ message: 'Welcome to the plot device.' });
+            reply({ message: 'Welcome to the Tappr API.' });
         }
     });
 
@@ -26,19 +23,22 @@ exports.register = function (server, options, next) {
 
 
 	server.route({
-        method: 'GET',
-        path: '/beer/{beerId}',
-        handler: function (request, reply) {
+		method: 'GET',
+		path: '/beer/{beerId}',
+		handler: function (request, reply) {
 
-			db.collection("beers").findOne({"id": request.params.beerId}, function(err, beer) {
-				reply( beer );
+			var db = request.server.plugins['hapi-mongodb'].db;
+
+			db.collection('beers').find({id: parseInt(request.params.beerId) }, function(err, result) {
+				if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
+				reply(result.toArray());
 			});
 
-        }
-    });
+		}
+	});
 
 
-    next();
+	next();
 };
 
 

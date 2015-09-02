@@ -19,7 +19,16 @@
   },
   "homepage": "https://github.com/Sharondio/tappr-api",
   "dependencies": {
-    "hapi-mongodb": "^3.0.0",
+    "confidence": "^1.2.0",
+    "glue": "^2.2.0",
+    "good": "^6.3.0",
+    "good-console": "^5.0.3",
+    "hapi": "^9.0.3",
     "hoek": "^2.14.0"
+  },
+  "devDependencies": {
+    "code": "^1.x.x",
+    "lab": "^5.x.x",
+    "nodemon": "^1.x.x"
   }
 }
