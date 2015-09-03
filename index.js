@@ -4,45 +4,46 @@ var Hapi = require('hapi');
 
 var server = new Hapi.Server({debug: {request: ['info', 'error']}});
 
-
 // Create server
-server.connection({
-	host: 'localhost',
-	port: 8001
-});
+server.connection({host: 'localhost', port: 8001});
 
-//MongoDB connection info
-var dbOpts = {
-	"url": "mongodb://localhost:27017/ncdevcon",
-	"settings": {
-		"db": {
-			"native_parser": false
-		}
-	}
-};
-
-
-// Add routes
+// Add plugins
 var plugins = [
 	{
 		register: require('hapi-mongodb'),
-		options: dbOpts
+		options: {
+			"url": "mongodb://localhost:27017/ncdevcon",
+			"settings": {
+				"db": {
+					"native_parser": false
+				}
+			}
+		}
 	},
 	{
-		register: require('./routes/beer.js')
-	}
+		register: require('good'),
+		options: {
+			opsInterval: 1000,
+			reporters: [{
+				reporter: require('good-console'),
+				events: { log: '*', response: '*' }
+			}]
+		}
+	},
+	{register: require('./routes/beer.js')},
+	{register: require('./routes/user.js')}
 ];
 
 server.register(plugins, function (err) {
 	if (err) { throw err; }
 
-	//if (!module.parent) {
+	if (!module.parent) {
 		server.start(function(err) {
 			if (err) { throw err; }
 
 			server.log('info', 'Server running at: ' + server.info.uri);
 		});
-	//}
+	}
 });
 
 module.exports = server;

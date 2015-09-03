@@ -4,35 +4,40 @@ exports.register = function (server, options, next) {
 
 	server.route({
 		method: 'GET',
-		path: '/beer',
+		path: '/user',
 		handler: function (request, reply) {
 			var args = {};
 			var limit = request.query.limit || 20;
 			limit = parseInt( limit );
 
-			var count = db.collection('beers').find( args ).count();
-			var result = db.collection('beers').find( args ).limit(limit);
-			reply(result.toArray());
+			//TODO: Implement endpoint
 
 		}
 	});
 
 	server.route({
-		method: 'GET',
-		path: '/beer/{beerId}',
+		method: 'POST',
+		path: '/user',
 		handler: function (request, reply) {
 
-			db.collection('beers').find({id: parseInt(request.params.beerId) }, function(err, result) {
-				if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
-				reply(result.toArray());
-			});
+			//TODO: Implement endpoint
 
 		}
 	});
 
 	server.route({
 		method: 'GET',
-		path: '/beer/{beerId}/rating',
+		path: '/user/{userId}',
+		handler: function (request, reply) {
+
+			//TODO: Implement endpoint
+
+		}
+	});
+
+	server.route({
+		method: 'GET',
+		path: '/user/{userId}/favorite',
 		handler: function (request, reply) {
 
 			//TODO: Implement endpoint
@@ -42,7 +47,7 @@ exports.register = function (server, options, next) {
 
 	server.route({
 		method: 'POST',
-		path: '/beer/{beerId}/rating',
+		path: '/user/{userId}/favorite',
 		handler: function (request, reply) {
 
 			//TODO: Implement endpoint
@@ -51,8 +56,8 @@ exports.register = function (server, options, next) {
 	});
 
 	server.route({
-		method: 'PUT',
-		path: '/beer/{beerId}/rating/{ratingId}',
+		method: 'DELETE',
+		path: '/user/{userId}/favorite/{favoriteId}',
 		handler: function (request, reply) {
 
 			//TODO: Implement endpoint
@@ -60,10 +65,9 @@ exports.register = function (server, options, next) {
 		}
 	});
 
-
 	next();
 };
 
 exports.register.attributes = {
-	name: 'beer-routes'
+	name: 'user-routes'
 };
