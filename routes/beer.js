@@ -8,10 +8,11 @@ exports.register = function (server, options, next) {
 		handler: function (request, reply) {
 			var args = {};
 			var limit = request.query.limit || 20;
+			var skip = request.query.skip || 0;
 			limit = parseInt( limit );
+			skip = parseInt( skip );
 
-			var count = db.collection('beers').find( args ).count();
-			var result = db.collection('beers').find( args ).limit(limit);
+			var result = db.collection('beers').find( args ).limit(limit).skip(skip);
 			reply(result.toArray());
 
 		}

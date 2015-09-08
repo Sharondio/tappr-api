@@ -22,7 +22,8 @@
     "good": "^6.3.0",
     "good-console": "^5.0.3",
     "hapi": "^9.0.3",
-    "hoek": "^2.14.0"
+    "hoek": "^2.14.0",
+    "lodash": "^3.10.1"
   },
   "devDependencies": {
     "code": "^1.x.x",
