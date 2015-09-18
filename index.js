@@ -5,7 +5,7 @@ var Hapi = require('hapi');
 var server = new Hapi.Server({debug: {request: ['info', 'error']}});
 
 // Create server
-server.connection({host: 'localhost', port: 8001});
+server.connection({host: 'localhost', port: 8001, routes: {cors: true}});
 
 // Add plugins
 var plugins = [
