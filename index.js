@@ -1,6 +1,8 @@
 'use strict';
 
-var Hapi = require('hapi');
+var Hapi = require('hapi'),
+	Inert = require('inert'),
+	Vision = require('vision');
 
 var server = new Hapi.Server({debug: {request: ['info', 'error']}});
 
@@ -30,6 +32,8 @@ var plugins = [
 			}]
 		}
 	},
+	Inert,
+	Vision,
 	{register: require('./routes/beer.js')},
 	{register: require('./routes/user.js')}
 ];
