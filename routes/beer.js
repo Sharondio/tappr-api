@@ -7,15 +7,13 @@ exports.register = function (server, options, next) {
 		method: 'GET',
 		path: '/beer',
 		handler: function (request, reply) {
-			var result,
-				limit = request.query.limit,
-				skip = request.query.skip;
+			var result;
 
 			if(request.query.q.length){
 				var regex = new RegExp(".*" + request.query.q.toLowerCase() + ".*");
-				result = db.collection('beers').find({"_index": regex}).limit(limit).skip(skip);
+				result = db.collection('beers').find({"_index": regex});
 			} else {
-				result = db.collection('beers').find({}).limit(limit).skip(skip);
+				result = db.collection('beers').find({});
 			}
 
 			reply(result.toArray());
@@ -24,9 +22,7 @@ exports.register = function (server, options, next) {
 		config: {
 			validate: {
 				query: {
-					q: Joi.string().min(0).default(''),
-					limit: Joi.number().integer().default(20).description('The number of records to return (default=20).'),
-					skip: Joi.number().integer().default(0).description('The number of records to skip for pagination purposes (default=0)')
+					q: Joi.string().min(0).default('')
 				}
 			}
 		}
