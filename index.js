@@ -35,7 +35,8 @@ var plugins = [
 	Inert,
 	Vision,
 	{register: require('./routes/beer.js')},
-	{register: require('./routes/user.js')}
+	{register: require('./routes/user.js')},
+    {register: require('./routes/category.js')}
 ];
 
 server.register(plugins, function (err) {
