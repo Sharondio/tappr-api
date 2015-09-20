@@ -22,7 +22,7 @@ exports.register = function (server, options, next) {
 		method: 'GET',
 		path: '/beer/{beerId}',
 		handler: function (request, reply) {
-
+            console.log('GET beers: ', request.params, reply);
 			db.collection('beers').find({id: parseInt(request.params.beerId) }, function(err, result) {
 				if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
 				reply(result.toArray());
