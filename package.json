@@ -23,7 +23,10 @@
     "good-console": "^5.0.3",
     "hapi": "^9.0.3",
     "hoek": "^2.14.0",
-    "lodash": "^3.10.1"
+    "inert": "^3.0.1",
+    "joi": "^6.7.1",
+    "lodash": "^3.10.1",
+    "vision": "^3.0.0"
   },
   "devDependencies": {
     "code": "^1.x.x",

@@ -1,20 +1,34 @@
 exports.register = function (server, options, next) {
 
-	var db = server.plugins['hapi-mongodb'].db;
+	var Joi = require('joi'),
+		db = server.plugins['hapi-mongodb'].db;
 
 	server.route({
 		method: 'GET',
 		path: '/beer',
 		handler: function (request, reply) {
-			var args = {};
-			var limit = request.query.limit || 20;
-			var skip = request.query.skip || 0;
-			limit = parseInt( limit );
-			skip = parseInt( skip );
+			var result,
+				limit = request.query.limit,
+				skip = request.query.skip;
 
-			var result = db.collection('beers').find( args ).limit(limit).skip(skip);
+			if(request.query.q.length){
+				var regex = new RegExp(".*" + request.query.q.toLowerCase() + ".*");
+				result = db.collection('beers').find({"_index": regex}).limit(limit).skip(skip);
+			} else {
+				result = db.collection('beers').find({}).limit(limit).skip(skip);
+			}
+
 			reply(result.toArray());
 
+		},
+		config: {
+			validate: {
+				query: {
+					q: Joi.string().min(0).default(''),
+					limit: Joi.number().integer().default(20).description('The number of records to return (default=20).'),
+					skip: Joi.number().integer().default(0).description('The number of records to skip for pagination purposes (default=0)')
+				}
+			}
 		}
 	});
 
@@ -22,12 +36,19 @@ exports.register = function (server, options, next) {
 		method: 'GET',
 		path: '/beer/{beerId}',
 		handler: function (request, reply) {
-
+            console.log('GET beers: ', request.params, reply);
 			db.collection('beers').find({id: parseInt(request.params.beerId) }, function(err, result) {
 				if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
 				reply(result.toArray());
 			});
 
+		},
+		config: {
+			validate: {
+				params: {
+					beerId: Joi.number().integer().description('The id of the beer to retrieve.')
+				}
+			}
 		}
 	});
 

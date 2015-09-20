@@ -1,11 +1,13 @@
 'use strict';
 
-var Hapi = require('hapi');
+var Hapi = require('hapi'),
+	Inert = require('inert'),
+	Vision = require('vision');
 
 var server = new Hapi.Server({debug: {request: ['info', 'error']}});
 
 // Create server
-server.connection({host: 'localhost', port: 8001});
+server.connection({host: 'localhost', port: 8001, routes: {cors: true}});
 
 // Add plugins
 var plugins = [
@@ -30,8 +32,11 @@ var plugins = [
 			}]
 		}
 	},
+	Inert,
+	Vision,
 	{register: require('./routes/beer.js')},
-	{register: require('./routes/user.js')}
+	{register: require('./routes/user.js')},
+    {register: require('./routes/category.js')}
 ];
 
 server.register(plugins, function (err) {
