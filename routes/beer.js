@@ -8,8 +8,8 @@ exports.register = function (server, options, next) {
 		path: '/beer',
 		handler: function (request, reply) {
 			var result,
-				limit = request.query.limit,
-				skip = request.query.skip;
+				limit = request.query.limit ? request.query.limit : 10000,
+				skip = request.query.skip ? request.query.skip : 0;
 
 			if(request.query.q.length){
 				var regex = new RegExp(".*" + request.query.q.toLowerCase() + ".*");
@@ -25,7 +25,7 @@ exports.register = function (server, options, next) {
 			validate: {
 				query: {
 					q: Joi.string().min(0).default(''),
-					limit: Joi.number().integer().default(20).description('The number of records to return (default=20).'),
+					limit: Joi.number().integer().default(10000).description('The number of records to return (default=20).'),
 					skip: Joi.number().integer().default(0).description('The number of records to skip for pagination purposes (default=0)')
 				}
 			}
