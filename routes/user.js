@@ -71,7 +71,7 @@ exports.register = function (server, options, next) {
 
 	server.route({
 		method: 'GET',
-		path: '/user/{userName}/favorite',
+		path: '/user/{userName}/favorite/beer',
 		handler: function (request, reply) {
 
 			db.collection('users').findOne({username: request.params.userName }, {'favorites': 1}, function(err, result) {
@@ -100,39 +100,9 @@ exports.register = function (server, options, next) {
 		}
 	});
 
-    //get the favorite status of a particular beer for a user
-    server.route({
-        method: 'GET',
-        path: '/user/{userName}/favorite/{beername}',
-        handler: function (request, reply) {
-
-            db.collection('users').findOne({'username': request.params.userName }, function(err, result){
-                if (err) return reply(Hapi.error.internal('Internal MongoDB error finding favorites', err)).code(500);
-
-                var favorites = result.favorites;
-
-                if(_.indexOf(favorites, request.payload.beername) > -1){
-                    //We've found the beer in the favorites list
-                    return reply(true).code(400);
-                } else {
-                    //Not found
-                    return reply(false).code(400);
-                }
-            });
-
-        },
-        config: {
-            validate: {
-                params: {
-                    userName: Joi.string().min(1).description('The userName to retrieve favorite status for.')
-                }
-            }
-        }
-    });
-
 	server.route({
 		method: 'POST',
-		path: '/user/{userName}/favorite',
+		path: '/user/{userName}/favorite/beer',
 		handler: function (request, reply) {
 
 			//Load the specified user's list of favorites
@@ -146,7 +116,11 @@ exports.register = function (server, options, next) {
 					return reply('Duplicate favorite found').code(400);
 				} else {
 					//No duplicates found, let's add it
-					favorites.push( {name: request.payload.name, id: request.payload.id});
+					favorites.push({
+                        name: request.payload.name,
+                        id: request.payload.id,
+                        'added': new Date()
+                    });
 					db.collection('users').update(
 						{'_id': result._id },
 						{$set:
@@ -254,7 +228,7 @@ exports.register = function (server, options, next) {
 
 	server.route({
 		method: 'GET',
-		path: '/user/{userName}/rating',
+		path: '/user/{userName}/rating/beer',
 		handler: function (request, reply) {
 
 			db.collection('users').findOne({username: request.params.userName }, {'ratings': 1}, function(err, result) {
@@ -278,7 +252,7 @@ exports.register = function (server, options, next) {
 
 	server.route({
 		method: 'POST',
-		path: '/user/{userName}/rating',
+		path: '/user/{userName}/rating/beer',
 		handler: function (request, reply) {
 
 			//Get the current list of ratings for the requested user
