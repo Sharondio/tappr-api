@@ -111,12 +111,12 @@ exports.register = function (server, options, next) {
 
 				var favorites = result.favorites;
 
-				if(_.indexOf(favorites, request.payload.beername) > -1){
+				if(_.findIndex(favorites, function(favorite){ return request.payload.id === favorite.id }) > -1){
 					//We've found the beer already in the favorite list, return an error
 					return reply('Duplicate favorite found').code(400);
 				} else {
 					//No duplicates found, let's add it
-					favorites.push( request.payload.beername);
+					favorites.push( {name: request.payload.name, id: request.payload.id});
 					db.collection('users').update(
 						{'_id': result._id },
 						{$set:
@@ -137,15 +137,16 @@ exports.register = function (server, options, next) {
 					userName: Joi.string().min(1).description('The userName to add a favorite to.')
 				},
 				payload: {
-					beername: Joi.string().min(1).description('The name of the beer to favorite.')
+					name: Joi.string().min(1).description('The name of the beer to favorite.'),
+					id: Joi.number().integer().description('The id of the beer to favorite')
 				}
 			}
 		}
 	});
 
 	server.route({
-		method: 'DELETE',
-		path: '/user/{userName}/favorite/{beername}',
+		method: 'GET',
+		path: '/user/{userName}/favorite/beer/{beerId}',
 		handler: function (request, reply) {
 
 			//Load the specified user's list of favorites
@@ -153,12 +154,43 @@ exports.register = function (server, options, next) {
 				if (err) return reply(Hapi.error.internal('Internal MongoDB error finding favorites', err)).code(500);
 
 				var favorites = result.favorites,
-					favIndex = _.indexOf(favorites, request.params.beername);
+					favIndex = _.findIndex(favorites, function(favorite){ return request.params.beerId === favorite.id });
+
+				if( favIndex === -1){
+					//We didn't find the favorite beer that was requested
+					return reply('Not Found').code(404);
+				} else {
+					//We found the requested favorite, return it
+					return reply(favorites[ favIndex ]).code(200);
+				}
+			})
+		},
+		config: {
+			validate: {
+				params: {
+					userName: Joi.string().min(1).description('The userName to search favorites for.'),
+					beerId: Joi.number().integer().description('The id of the beer to search user favorites for.')
+				}
+			}
+		}
+	});
+
+	server.route({
+		method: 'DELETE',
+		path: '/user/{userName}/favorite/beer/{beerId}',
+		handler: function (request, reply) {
+
+			//Load the specified user's list of favorites
+			db.collection('users').findOne({'username': request.params.userName }, {'favorites':1}, function(err, result){
+				if (err) return reply(Hapi.error.internal('Internal MongoDB error finding favorites', err)).code(500);
+
+				var favorites = result.favorites,
+					favIndex = _.findIndex(favorites, function(favorite){ return request.params.beerId === favorite.id });
 
 				if( favIndex > -1){
 					//We've found the beer that has been requested to be removed
 					_.remove(favorites, function (favorite) {
-						return favorite === request.params.beername;
+						return request.params.beerId === favorite.id
 					});
 
 					db.collection('users').update(
@@ -174,7 +206,7 @@ exports.register = function (server, options, next) {
 
 				} else {
 					//We didn't find the beer that was requested to be removed so give a 404 response
-					return reply('No favorite found with that name').code(404);
+					return reply('No favorite found with specified beerId').code(404);
 				}
 			})
 
@@ -184,7 +216,7 @@ exports.register = function (server, options, next) {
 			validate: {
 				params: {
 					userName: Joi.string().min(1).description('The userName to remove the favorite from.'),
-					beername: Joi.string().min(1).description('The name of the beer to remove from favorites.')
+					beerId: Joi.number().integer().description('The ID of the beer to remove from favorites.')
 				}
 			}
 		}
@@ -231,16 +263,17 @@ exports.register = function (server, options, next) {
 				} else {
 					ratings = user.ratings || [];
 
-					var existingRating = _.find(ratings, { 'beername': request.payload.beer.name });
+					var existingRating = _.find(ratings, function(rating){ return request.payload.id === rating.id });
 
 					if( existingRating ){
-						existingRating.rating = request.payload.beer.rating;
+						existingRating.rating = request.payload.rating;
 						existingRating.updated = new Date();
 
 					} else {
 						ratings.push({
-							'beername': request.payload.beer.name,
-							'rating': request.payload.beer.rating,
+							'id': request.payload.id,
+							'name': request.payload.name,
+							'rating': request.payload.rating,
 							'added': new Date(),
 							'updated': new Date()
 						});
@@ -261,10 +294,40 @@ exports.register = function (server, options, next) {
 					userName: Joi.string().min(1).description('The userName for the user adding a rating.')
 				},
 				payload: {
-					beer: Joi.object().keys({
-						name: Joi.string().min(1).description('The name of the beer being rated'),
-						rating: Joi.number().integer()
-					})
+					id: Joi.number().integer().description('The ID of the beer being rated'),
+					name: Joi.string().min(1).description('The name of the beer being rated'),
+					rating: Joi.number().integer().description('The rating given to the specified beer')
+				}
+			}
+		}
+	});
+
+	server.route({
+		method: 'GET',
+		path: '/user/{userName}/rating/beer/{beerId}',
+		handler: function (request, reply) {
+
+			//Load the specified user's list of favorites
+			db.collection('users').findOne({'username': request.params.userName }, {'ratings':1}, function(err, result){
+				if (err) return reply(Hapi.error.internal('Internal MongoDB error finding ratings', err)).code(500);
+
+				var ratings = result.ratings,
+					favIndex = _.findIndex(ratings, function(rating){ return request.params.beerId === rating.id });
+
+				if( favIndex === -1){
+					//We didn't find the favorite beer that was requested
+					return reply('Not Found').code(404);
+				} else {
+					//We found the requested favorite, return it
+					return reply(ratings[ favIndex ]).code(200);
+				}
+			})
+		},
+		config: {
+			validate: {
+				params: {
+					userName: Joi.string().min(1).description('The userName to search favorites for.'),
+					beerId: Joi.number().integer().description('The id of the beer to search user favorites for.')
 				}
 			}
 		}
@@ -272,7 +335,7 @@ exports.register = function (server, options, next) {
 
 	server.route({
 		method: 'DELETE',
-		path: '/user/{userName}/rating/{beername}',
+		path: '/user/{userName}/rating/beer/{beerId}',
 		handler: function (request, reply) {
 
 			//Load the specified user's list of favorites
@@ -282,13 +345,13 @@ exports.register = function (server, options, next) {
 				var ratings = result.ratings,
 					ratingIndex = _.findIndex(ratings,
 											  function(rating){
-												  return rating.beername.toLowerCase() == request.params.beername.toLowerCase()
+												  return rating.id == request.params.beerId
 											  });
 
 				if( ratingIndex > -1){
 					//We've found the beer that has been requested to be removed
 					_.remove(ratings, function (rating) {
-						return rating.beername.toLowerCase() == request.params.beername.toLowerCase()
+						return rating.id == request.params.beerId
 					});
 
 					db.collection('users').update(
@@ -314,7 +377,7 @@ exports.register = function (server, options, next) {
 			validate: {
 				params: {
 					userName: Joi.string().min(1).description('The userName to remove the ratig from.'),
-					beername: Joi.string().min(1).description('The name of the beer to remove from ratings.')
+					beerId: Joi.number().integer().description('The ID of the beer to remove from ratings.')
 				}
 			}
 		}
