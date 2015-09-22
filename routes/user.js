@@ -58,7 +58,7 @@ exports.register = function (server, options, next) {
 
 				var response;
 
-				if( !result._id ){
+				if( !result ){
 					response = reply('Not Found').code(404);
 				} else {
 					response = reply(result).code(200).type('application/json').header('Location', '/user/' + result.userName);
