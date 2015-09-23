@@ -25,19 +25,25 @@ exports.register = function (server, options, next) {
 		path: '/user',
 		handler: function (request, reply) {
 
+            var existingUser;
+
 			//Look up requested username to see if it already exists
-			var existingUser = db.collection('users').findOne({username: request.payload.username });
+			db.collection('users').findOne({username: request.payload.username }, function (err, data) {
+                existingUser = data;
+                console.log('USER: ', data);
 
-			if(existingUser._id){
-				reply('Duplicate userName').code(400);
-			} else {
+                if (existingUser){
+                    reply('Duplicate userName').code(400);
+                } else {
 
-				db.collection('users').insert({'username': request.payload.username, 'favorites': [], 'ratings': []}, function(err, result) {
-					if (err) return reply(Hapi.error.internal('Internal MongoDB error creating the user', err));
-					reply().code(201);
-				});
+                    db.collection('users').insert({'username': request.payload.username, 'favorites': [], 'ratings': []}, function(err, result) {
+                        if (err) return reply(Hapi.error.internal('Internal MongoDB error creating the user', err));
+                        reply().code(201);
+                    });
 
-			}
+                }
+
+            });
 		},
 		config: {
 			validate: {
