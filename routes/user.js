@@ -26,13 +26,13 @@ exports.register = function (server, options, next) {
 		handler: function (request, reply) {
 
 			//Look up requested username to see if it already exists
-			var existingUser = db.collection('users').findOne({username: request.payload.userName });
+			var existingUser = db.collection('users').findOne({username: request.payload.username });
 
 			if(existingUser._id){
 				reply('Duplicate userName').code(400);
 			} else {
 
-				db.collection('users').insert({'username': request.payload.userName, 'favorites': [], 'ratings': []}, function(err, result) {
+				db.collection('users').insert({'username': request.payload.username, 'favorites': [], 'ratings': []}, function(err, result) {
 					if (err) return reply(Hapi.error.internal('Internal MongoDB error creating the user', err));
 					reply().code(201);
 				});
@@ -42,7 +42,7 @@ exports.register = function (server, options, next) {
 		config: {
 			validate: {
 				payload: {
-					userName: Joi.string().min(1).description('The name of the beer to login/create.')
+					username: Joi.string().min(1).description('The name of the beer to login/create.')
 				}
 			}
 		}
