@@ -2,10 +2,6 @@
 
 API for Tappr AngularJS demo app
 
-[![Dependency Status](https://david-dm.org/Sharondio/tappr-api.svg)](https://david-dm.org/Sharondio/tappr-api)
-[![devDependency Status](https://david-dm.org/Sharondio/tappr-api/dev-status.svg?theme=shields.io)](https://david-dm.org/Sharondio/tappr-api#info=devDependencies)
-
-
 ## Usage
 This is the companion document for the tappr-demo repo.
 
