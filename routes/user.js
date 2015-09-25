@@ -59,7 +59,7 @@ exports.register = function (server, options, next) {
 		path: '/user/{userName}',
 		handler: function (request, reply) {
 
-			db.collection('users').findOne({username: request.params.userName }, {'username': 1}, function(err, result) {
+			db.collection('users').findOne({username: request.params.userName }, function(err, result) {
 				if (err) return reply(Hapi.error.internal('Internal MongoDB error', err)).code(500);
 
 				var response;
