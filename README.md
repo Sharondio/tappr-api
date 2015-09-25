@@ -6,7 +6,7 @@ API for Tappr AngularJS demo app
 This is the companion document for the tappr-demo repo.
 
 ## Installation
-This application requires node.js installed to run the build process. It is currently tested and run under node 0.10.22. If you're running a different version of node, install (Node Version Manager - 'nvm')[https://github.com/creationix/nvm] and set your version to 0.10.22.
+This application requires MongoDB as a data store and node.js to run the API server. It is currently tested and run under node 0.10.22. If you're running a different version of node, install (Node Version Manager - 'nvm')[https://github.com/creationix/nvm] and set your version to 0.10.22.
 
     > git clone git@github.com:Sharondio/tappr-api.git
     > cd tappr-api/data
@@ -17,8 +17,8 @@ This application requires node.js installed to run the build process. It is curr
     > mongoimport --db ncdevcon --collection styles --host 127.0.0.1 styles.json
     > cd ..
     > node ./index.js
-    
-The application is setup to run on port 8001, which is the port that the companion app is setup to find. 
+
+The application is setup to run on port 8001, which is the port that the companion app is setup to find.
 
 ## API
 

@@ -48,7 +48,7 @@ exports.register = function (server, options, next) {
 		config: {
 			validate: {
 				payload: {
-					username: Joi.string().min(1).description('The name of the beer to login/create.')
+					username: Joi.string().min(1).description('The name of the user to login/create.')
 				}
 			}
 		}
