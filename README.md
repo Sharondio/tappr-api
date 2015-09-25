@@ -22,51 +22,8 @@ The application is setup to run on port 8001, which is the port that the compani
 
 ## API
 
-
-		method: 'GET'
-		path: '/user'
-		// Returns all users
-
-		method: 'POST'
-		path: '/user'
-		// Creates a new user
-
-		method: 'GET'
-		path: '/user/{userName}'
-		// Returns a single user object
-
-		method: 'GET'
-		path: '/user/{userName}/favorite/beer'
-		// Returns a list of user favorites
-
-		method: 'POST'
-		path: '/user/{userName}/favorite/beer'
-		// Adds a beer to favorites
-
-		method: 'GET'
-		path: '/user/{userName}/favorite/beer/{beerId}'
-		// Returns the user favorite status of a single beer
-
-		method: 'DELETE'
-		path: '/user/{userName}/favorite/beer/{beerId}'
-		// Deletes a beer from user favorites
-
-		method: 'GET'
-		path: '/user/{userName}/rating/beer'
-		// Returns a list of all rated beers for a user
-
-		method: 'POST'
-		path: '/user/{userName}/rating/beer'
-		// Adds a rating to a beer
-
-		method: 'GET'
-		path: '/user/{userName}/rating/beer/{beerId}'
-		// Returns the user rating status and rating for a beer
-
-		method: 'DELETE'
-		path: '/user/{userName}/rating/beer/{beerId}'
-		// Removes a user rating from a beer.
-
+The API uses the excellent Swagger library for automatically creating documentation. Once the API is running, browse to the (API Home Page)[http://localhost:8001] and you'll see the Swagger documentation interface.
+You can then click the route groups and browse through and even test the endpoints.
 
 ## License
 

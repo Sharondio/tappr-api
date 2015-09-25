@@ -20,6 +20,8 @@ exports.register = function (server, options, next) {
 
 		},
 		config: {
+			tags: ['api'],
+			description: 'Get all beers',
 			validate: {
 				query: {
 					q: Joi.string().min(0).default('')
@@ -40,6 +42,8 @@ exports.register = function (server, options, next) {
 
 		},
 		config: {
+			tags: ['api'],
+			description: 'Get a specific beer',
 			validate: {
 				params: {
 					beerId: Joi.number().integer().description('The id of the beer to retrieve.')

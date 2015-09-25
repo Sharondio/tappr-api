@@ -17,6 +17,10 @@ exports.register = function (server, options, next) {
 			var result = db.collection('users').find( args ).limit(limit).skip(skip);
 			reply(result.toArray());
 
+		},
+		config: {
+			tags: ['api'],
+			description: 'Get all users'
 		}
 	});
 
@@ -46,6 +50,8 @@ exports.register = function (server, options, next) {
             });
 		},
 		config: {
+			tags: ['api'],
+			description: 'Create a new user',
 			validate: {
 				payload: {
 					username: Joi.string().min(1).description('The name of the user to login/create.')
@@ -72,6 +78,15 @@ exports.register = function (server, options, next) {
 
 				return response;
 			});
+		},
+		config: {
+			tags: ['api'],
+			description: 'Get user by username',
+			validate: {
+				params: {
+					userName: Joi.string().min(1).description('The userName to search for.')
+				}
+			}
 		}
 	});
 
@@ -176,6 +191,8 @@ exports.register = function (server, options, next) {
 			})
 		},
 		config: {
+			tags: ['api'],
+			description: 'Get favorites for user',
 			validate: {
 				params: {
 					userName: Joi.string().min(1).description('The userName to search favorites for.'),
@@ -223,6 +240,8 @@ exports.register = function (server, options, next) {
 
 		},
 		config: {
+			tags: ['api'],
+			description: 'Delete a favorited beer for a user',
 			validate: {
 				params: {
 					userName: Joi.string().min(1).description('The userName to remove the favorite from.'),
@@ -253,6 +272,15 @@ exports.register = function (server, options, next) {
 				return response;
 			});
 
+		},
+		config: {
+			tags: ['api'],
+			description: 'Get beer ratings for user',
+			validate: {
+				params: {
+					userName: Joi.string().min(1).description('The userName to remove the favorite from.')
+				}
+			}
 		}
 	});
 
@@ -299,6 +327,8 @@ exports.register = function (server, options, next) {
 
 		},
 		config: {
+			tags: ['api'],
+			description: 'Delete a rating for a user',
 			validate: {
 				params: {
 					userName: Joi.string().min(1).description('The userName for the user adding a rating.')
@@ -336,7 +366,7 @@ exports.register = function (server, options, next) {
 		config: {
 			validate: {
 				params: {
-					userName: Joi.string().min(1).description('The userName to search favorites for.'),
+					userName: Joi.string().min(1).description('The userName to search ratings for.'),
 					beerId: Joi.number().integer().description('The id of the beer to search user favorites for.')
 				}
 			}
@@ -384,9 +414,11 @@ exports.register = function (server, options, next) {
 
 		},
 		config: {
+			tags: ['api'],
+			description: 'Delete a beer rating for a user',
 			validate: {
 				params: {
-					userName: Joi.string().min(1).description('The userName to remove the ratig from.'),
+					userName: Joi.string().min(1).description('The userName to remove the rating from.'),
 					beerId: Joi.number().integer().description('The ID of the beer to remove from ratings.')
 				}
 			}
