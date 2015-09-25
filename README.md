@@ -23,9 +23,13 @@ The application is setup to run on port 8001, which is the port that the compani
 ## API
 
 
-		method: 'POST'
+		method: 'GET'
 		path: '/user'
 		// Returns all users
+
+		method: 'POST'
+		path: '/user'
+		// Creates a new user
 
 		method: 'GET'
 		path: '/user/{userName}'
