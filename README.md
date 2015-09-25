@@ -16,6 +16,7 @@ This application requires MongoDB as a data store and node.js to run the API ser
     > mongoimport --db ncdevcon --collection categories --host 127.0.0.1 categories.json
     > mongoimport --db ncdevcon --collection styles --host 127.0.0.1 styles.json
     > cd ..
+    > npm install
     > node ./index.js
 
 The application is setup to run on port 8001, which is the port that the companion app is setup to find.
