@@ -9,9 +9,12 @@ exports.register = function (server, options, next) {
 		handler: function (request, reply) {
 			var result;
 
-			if(request.query.q.length){
+			if (request.query.q.length) {
 				var regex = new RegExp(".*" + request.query.q.toLowerCase() + ".*");
 				result = db.collection('beers').find({"_index": regex});
+			} else if( request.query.brewery.length ) {
+				var regex = new RegExp(".*" + request.query.brewery.toLowerCase() + ".*", "i");
+				result = db.collection('beers').find({"brewery": regex});
 			} else {
 				result = db.collection('beers').find({});
 			}
@@ -24,7 +27,8 @@ exports.register = function (server, options, next) {
 			description: 'Get all beers',
 			validate: {
 				query: {
-					q: Joi.string().min(0).default('')
+					q: Joi.string().min(0).default(''),
+					brewery: Joi.string().min(0).default('')
 				}
 			}
 		}
