@@ -56,6 +56,7 @@ var plugins = [
 		}
 	},
 	{register: require('./routes/beer.js')},
+    {register: require('./routes/brewery.js')},
 	{register: require('./routes/user.js')},
     {register: require('./routes/category.js')}
 ];
